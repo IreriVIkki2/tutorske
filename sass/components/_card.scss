@@ -1,0 +1,29 @@
+.card {
+    padding: $gap-sm;
+    border-radius: $gap-xs;
+    box-shadow: 0 4px 6px -1px rgba($color-text-bold, 0.1),
+        0 2px 4px -1px rgba($color-text-bold, 0.06);
+    background-color: $color-white;
+
+    &--light {
+        background-color: $color-light;
+    }
+
+    &--primary {
+        background-color: $color-primary;
+        color: $color-white;
+    }
+
+    &--secondary {
+        background-color: $color-secondary;
+    }
+
+    &--tertiary {
+        background-color: $color-tertiary;
+        color: $color-white;
+    }
+
+    &--tertiary-2 {
+        background-color: $color-tertiary-2;
+    }
+}

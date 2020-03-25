@@ -1,0 +1,48 @@
+body {
+    // letter-spacing: 0;
+    text-transform: none;
+    text-decoration: none;
+    color: $color-text-light;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+
+    line-height: 1.2;
+    font-weight: 400;
+    font-size: $font-size;
+    font-family: $font-montserrat;
+    background-color: $color-light;
+    margin: $gap-md;
+}
+
+h1,
+h2,
+h3 {
+    // all: unset;
+    font-weight: unset;
+}
+
+.title {
+    font-family: $font-sen;
+    font-weight: 400;
+
+    &--sm {
+        font-size: $font-md;
+    }
+
+    &--md {
+        font-size: $font-lg;
+    }
+
+    &--lg {
+        font-size: $font-xl;
+    }
+}
+
+.lighter {
+    font-weight: 200;
+}
+
+.bolder {
+    font-weight: 700;
+}

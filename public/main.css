@@ -1,0 +1,124 @@
+/*
+0 - 600px:      Phone
+600 - 900px:    Tablet portrait
+900 - 1200px:   Tablet landscape
+[1200 - 1800] is where our normal styles apply
+1800px + :      Big desktop
+$breakpoint arguement choices:
+- phone
+- tab-port
+- tab-land
+- big-desktop
+ORDER: Base + typography > general layout + grid > page layout > components
+1em = 16px
+*/
+html {
+  font-size: 62.5%; }
+  @media only screen and (max-width: 30.5em) {
+    html {
+      font-size: 50%;
+      background-color: turquoise; } }
+
+body {
+  box-sizing: border-box;
+  background-color: #ffffff;
+  width: 100vw;
+  overflow-x: hidden; }
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; }
+
+img,
+span,
+a,
+small,
+i,
+del,
+b {
+  display: inline-block; }
+
+body {
+  text-transform: none;
+  text-decoration: none;
+  color: #484949;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.2;
+  font-weight: 400;
+  font-size: 1.8rem;
+  font-family: "Montserrat", sans-serif;
+  background-color: #d6d7d2;
+  margin: 2.9rem; }
+
+h1,
+h2,
+h3 {
+  font-weight: unset; }
+
+.title {
+  font-family: "Sen", sans-serif;
+  font-weight: 400; }
+  .title--sm {
+    font-size: 2.6rem; }
+  .title--md {
+    font-size: 4.2rem; }
+  .title--lg {
+    font-size: 6.7rem; }
+
+.lighter {
+  font-weight: 200; }
+
+.bolder {
+  font-weight: 700; }
+
+.mb-xs {
+  margin-bottom: 1rem !important; }
+
+.mb-sm {
+  margin-bottom: 1.8rem !important; }
+
+.mb-md {
+  margin-bottom: 2.9rem !important; }
+
+.mb-lg {
+  margin-bottom: 4.7rem !important; }
+
+.mb-xl {
+  margin-bottom: 7.6rem !important; }
+
+.btn, .btn:link, .btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 1rem 1.8rem;
+  display: inline-block;
+  border-radius: 10rem;
+  transition: all 0.2s;
+  position: relative;
+  font-size: 1.6rem;
+  color: currentColor;
+  border: none;
+  outline: none;
+  cursor: pointer; }
+
+.card {
+  padding: 1.8rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(34, 34, 34, 0.1), 0 2px 4px -1px rgba(34, 34, 34, 0.06);
+  background-color: #ffffff; }
+  .card--light {
+    background-color: #d6d7d2; }
+  .card--primary {
+    background-color: #bb743f;
+    color: #ffffff; }
+  .card--secondary {
+    background-color: #ebb170; }
+  .card--tertiary {
+    background-color: #347668;
+    color: #ffffff; }
+  .card--tertiary-2 {
+    background-color: #f1dbce; }
