@@ -1,27 +1,33 @@
 const { v4: uuid } = require("uuid");
 
-
 /**
  * @function
  *
- * @param {programId} string Id of the associated program
+ * @param {uid} string Id of the user
  *
- * @returns {Object} This returns an object with set defaults that is then used to create a new exercise/day in firestore
+ * @returns {Object} This returns a new user profile object
  */
-const profile = uid => {
-    const dayId = uuid().replace(/-/g, "");
+const profile = user => {
     return {
         kind: "user/profile",
-        _id: uid,
+        _id: user.uid,
+
         isAdmin: false,
         isTutor: false,
         isParent: false,
-        userName: "",
-        profilePhoto: "",
+
+        displayName: user.displayName,
+        photoUrl: user.photoURL,
         fullName: "",
+        firstName: "",
+        lastName: "",
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        isAnonymous: user.isAnonymous,
+
         registeredAt: Date.now(),
         updatedAt: Date.now(),
     };
 };
 
-mocule.exports = {profile}
+module.exports = { profile };

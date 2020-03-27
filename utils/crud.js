@@ -1,5 +1,5 @@
 const { client } = require("./client");
-const {profile} = require("./init");
+const { profile } = require("./init");
 
 class Crud {
     constructor() {
@@ -44,22 +44,24 @@ class Crud {
      * @returns {Promise <{profile}>} This returns a promise which resolves to a profile object
      */
 
-    createUserProfile(uid) {
+    createUserProfile(user, isParent) {
         return new Promise(async (resolve, reject) => {
-            const newProfile = profile();
+            const newProfile = profile(user);
 
-            await firebaseClient()
+            newProfile.isParent = isParent;
+            newProfile.isTutor = !isParent;
+
+            await client()
                 .db.collection("profiles")
-                .doc(uid)
+                .doc(newProfile._id)
                 .set(newProfile)
-                .then(() => resolve(newProfile._id))
+                .then(() => resolve(newProfile))
                 .catch(err => {
                     console.error(err);
                     return reject(err);
                 });
         });
     }
-
 }
 
 module.exports = new Crud();

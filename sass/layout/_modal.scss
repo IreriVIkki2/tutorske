@@ -1,0 +1,45 @@
+.modal {
+    &__content-container {
+        width: 100%;
+        margin: auto;
+    }
+
+    &__check {
+        display: none;
+    }
+
+    &__backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba($color-primary, 0.5);
+        z-index: 99;
+        opacity: 0;
+        transform: translateX(-100%);
+        transition: opacity 0.2s ease, transform 0.3s ease-in-out;
+    }
+
+    &__container {
+        position: absolute;
+        top: 10%;
+        left: 10%;
+        right: 10%;
+        height: fit-content;
+        transform: translateY(-100%);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.3s ease-in-out;
+    }
+
+    &__check:checked ~ &__container {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+
+    &__check:checked ~ &__backdrop {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}

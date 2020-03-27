@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
 import App from "next/app";
-import UserContext from "../context/UserContext";
 import { client, firebase } from "../utils/client";
-import Navbar from "../components/NavBar";
-import Footer from "../components/Footer";
+import crud from "../utils/crud";
 import fetch from "isomorphic-unfetch";
 import "react-quill/dist/quill.snow.css";
 import "../public/main.css";
+import Layout from "../components/Layout";
 
 export default class MyApp extends App {
     static async getInitialProps({ ctx }) {
@@ -20,15 +19,10 @@ export default class MyApp extends App {
         this.state = {
             user: this.props.user,
             profile: null,
-            mounted: false,
         };
-
-        this.handleLogout = this.handleLogout.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
-        this.addProfileListener = this.addProfileListener.bind(this);
     }
 
-    async addProfileListener(uid) {
+    addProfileListener = async uid => {
         let removeProfileListener = await client()
             .db.collection("profiles")
             .doc(uid)
@@ -37,10 +31,9 @@ export default class MyApp extends App {
                 this.setState({
                     removeProfileListener,
                     profile: doc.data(),
-                    mounted: true,
                 });
             });
-    }
+    };
 
     componentDidMount() {
         const { user } = this.state;
@@ -62,7 +55,7 @@ export default class MyApp extends App {
                     })
                     .then(() => console.log("add listener"));
             } else {
-                this.setState({ user: null, mounted: true });
+                this.setState({ user: null });
                 fetch("/api/logout", {
                     method: "POST",
                     credentials: "same-origin",
@@ -72,38 +65,128 @@ export default class MyApp extends App {
     }
 
     render() {
-        const { Component, pageProps } = this.props;
-        const { user, profile, mounted } = this.state;
+        const { Component } = this.props;
+        const { user, profile } = this.state;
 
         return (
             <Fragment>
-                <UserContext.Provider
-                    value={{
+                <Layout
+                    context={{
                         user,
-                        profile: user && profile,
-                        isAdmin: true,
-                        signIn: this.handleLogin,
+                        profile,
+                        googleLogin: this.handleGoogleLogin,
+                        facebookLogin: this.handleFacebookLogin,
+                        emailAndPasswordLogin: this.handleEmailAndPasswordLogin,
+                        emailAndPasswordRegister: this
+                            .handleEmailAndPasswordRegister,
                         signOut: this.handleLogout,
                     }}
                 >
-                    <Navbar />
-                    <Component {...pageProps} />
-                    <Footer />
-                </UserContext.Provider>
+                    <Component />
+                </Layout>
             </Fragment>
         );
     }
 
-    handleLogin() {
-        console.log("login");
-        client().auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    }
+    handleEmailAndPasswordRegister = (email, password, username) => {
+        console.log("handleEmailAndPasswordRegister -> username", username);
+        client()
+            .auth.createUserWithEmailAndPassword(email, password)
+            .then(result => {
+                if (result.additionalUserInfo.isNewUser) {
+                    crud.createUserProfile(
+                        {
+                            ...result.user,
+                            displayName: username,
+                        },
+                        isParent,
+                    ).then(profile => {
+                        localStorage.setItem(
+                            "profile",
+                            JSON.stringify(profile),
+                        );
+                        this.setState({ profile });
+                    });
+                }
+            })
+            .catch(error => {
+                const errorCode = error.code;
+                if (errorCode && errorCode === "auth/email-already-in-use") {
+                    return alert(errorCode);
+                }
+            });
+    };
 
-    handleLogout() {
-        client().auth.signOut();
-    }
+    handleEmailAndPasswordLogin = (email, password) => {
+        client()
+            .auth.signInWithEmailAndPassword(email, password)
+            .then(result => {
+                console.log("handleEmailAndPassword -> result", result);
+            })
+            .catch(error => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // ...
+            });
+    };
+
+    handleFacebookLogin = () => {
+        client().auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+    };
+
+    handleGoogleLogin = isParent => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope("https://www.googleapis.com/auth/userinfo.profile");
+        client()
+            .auth.signInWithPopup(provider)
+            .then(result => {
+                if (result.additionalUserInfo.isNewUser) {
+                    crud.createUserProfile(result.user, isParent).then(
+                        profile => {
+                            localStorage.setItem(
+                                "profile",
+                                JSON.stringify(profile),
+                            );
+                            this.setState({ profile });
+                        },
+                    );
+                }
+            })
+            .catch(error => {
+                // Handle Errors here.
+                var errorCode = error.code;
+                console.log("handleGoogleLogin -> errorCode", errorCode);
+                var errorMessage = error.message;
+                console.log("handleGoogleLogin -> errorMessage", errorMessage);
+                // The email of the user's account used.
+                var email = error.email;
+                console.log("handleGoogleLogin -> email", email);
+                if (email) {
+                    alert("account already in use");
+                }
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                console.log("handleGoogleLogin -> credential", credential);
+                // ...
+            });
+    };
+
+    handleLogout = () => {
+        client()
+            .auth.signOut()
+            .then(() => {
+                // Sign-out successful.
+                localStorage.removeItem("profile");
+            })
+            .catch(error => {
+                console.log("handleLogout -> error", error);
+                // An error happened.
+            });
+    };
 
     componentWillUnmount() {
+        localStorage.removeItem("profile");
         if (this.state.removeProfileListener) {
             this.state.removeProfileListener();
         }

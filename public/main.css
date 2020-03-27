@@ -16,13 +16,10 @@ html {
   font-size: 62.5%; }
   @media only screen and (max-width: 30.5em) {
     html {
-      font-size: 50%;
-      background-color: turquoise; } }
+      font-size: 50%; } }
 
 body {
   box-sizing: border-box;
-  background-color: #ffffff;
-  width: 100vw;
   overflow-x: hidden; }
 
 *,
@@ -41,6 +38,9 @@ del,
 b {
   display: inline-block; }
 
+.content-body {
+  min-height: 80vh; }
+
 body {
   text-transform: none;
   text-decoration: none;
@@ -51,9 +51,7 @@ body {
   line-height: 1.2;
   font-weight: 400;
   font-size: 1.8rem;
-  font-family: "Montserrat", sans-serif;
-  background-color: #d6d7d2;
-  margin: 2.9rem; }
+  font-family: "Montserrat", sans-serif; }
 
 h1,
 h2,
@@ -91,6 +89,9 @@ h3 {
 .mb-xl {
   margin-bottom: 7.6rem !important; }
 
+.m-xl {
+  margin: 7.6rem !important; }
+
 .btn, .btn:link, .btn:visited {
   text-transform: uppercase;
   text-decoration: none;
@@ -122,3 +123,41 @@ h3 {
     color: #ffffff; }
   .card--tertiary-2 {
     background-color: #f1dbce; }
+
+.modal__content-container {
+  width: 100%;
+  margin: auto; }
+
+.modal__check {
+  display: none; }
+
+.modal__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(187, 116, 63, 0.5);
+  z-index: 99;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 0.2s ease, transform 0.3s ease-in-out; }
+
+.modal__container {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  height: fit-content;
+  transform: translateY(-100%);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.3s ease-in-out; }
+
+.modal__check:checked ~ .modal__container {
+  opacity: 1;
+  transform: translateY(0%); }
+
+.modal__check:checked ~ .modal__backdrop {
+  opacity: 1;
+  transform: translateX(0%); }

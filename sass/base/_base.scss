@@ -3,14 +3,11 @@ html {
 
     @include respond(phone) {
         font-size: 50%;
-        background-color: turquoise;
     }
 }
 
 body {
     box-sizing: border-box;
-    background-color: $color-white;
-    width: 100vw;
     overflow-x: hidden;
 }
 
@@ -30,4 +27,8 @@ i,
 del,
 b {
     display: inline-block;
+}
+
+.content-body {
+    min-height: 80vh;
 }

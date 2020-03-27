@@ -1,15 +1,24 @@
 import { useContext } from "react";
-import UserContext from "../context/UserContext";
+import AppContext from "../context/AppContext";
+import Link from "next/link";
 
 const NavBar = () => {
-    const { user, profile, usAdmin, signIn, signOut } = useContext(UserContext);
+    const { user, profile, usAdmin, signIn, signOut } = useContext(AppContext);
+    console.log("NavBar -> profile", profile);
     return (
         <div>
             <nav>
-                {user ? (
-                    <button onClick={signIn}>Login</button>
+                {profile ? (
+                    <div>
+                        <p>{profile.displayName}</p>
+                        <button onClick={signOut}>logout</button>
+                    </div>
                 ) : (
-                    <button onClick={signOut}>logout</button>
+                    <Link href="/auth/register">
+                        <a className="btn" onClick={signIn}>
+                            register
+                        </a>
+                    </Link>
                 )}
             </nav>
         </div>
